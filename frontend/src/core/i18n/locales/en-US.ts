@@ -63,13 +63,13 @@ export const enUS: Translations = {
 
   // Welcome
   welcome: {
-    greeting: "Hello, again!",
+    greeting: "Hello, welcome to FinMind-wiles!",
     description:
-      "Welcome to 🦌 DeerFlow, an open source super agent. With built-in and custom skills, DeerFlow helps you search on the web, analyze data, and generate artifacts like slides, web pages and do almost anything.",
+      "📊 FinMind-wiles — A financial report analysis super agent built on FinMind-wiles.\nFocuses on A-share, HK, and US stock financial analysis with natural language queries,\nautomating data retrieval, metric calculation, risk assessment, and report generation.",
 
     createYourOwnSkill: "Create Your Own Skill",
     createYourOwnSkillDescription:
-      "Create your own skill to release the power of DeerFlow. With customized skills,\nDeerFlow can help you search on the web, analyze data, and generate\n artifacts like slides, web pages and do almost anything.",
+      "Extend FinMind-wiles with custom skills for profitability analysis, growth metrics,\ncash flow quality, valuation, and peer comparison across global markets.",
   },
 
   // Clipboard
@@ -398,13 +398,13 @@ export const enUS: Translations = {
     save: "Save agent",
     saving: "Saving agent...",
     saveRequested:
-      "Save requested. DeerFlow is generating and saving an initial version now.",
+      "Save requested. FinMind-wiles is generating and saving an initial version now.",
     saveHint:
       "You can save this agent at any time from the top-right menu, even if this is only a first draft.",
     saveCommandMessage:
       "Please save this custom agent now based on everything we have discussed so far. Treat this as my explicit confirmation to save. If some details are still missing, make reasonable assumptions, generate a concise first SOUL.md in English, and call setup_agent immediately without asking me for more confirmation.",
     agentCreatedPendingRefresh:
-      "The agent was created, but DeerFlow could not load it yet. Please refresh this page in a moment.",
+      "The agent was created, but FinMind-wiles could not load it yet. Please refresh this page in a moment.",
     more: "More actions",
     agentCreated: "Agent created!",
     startChatting: "Start chatting",
@@ -419,13 +419,13 @@ export const enUS: Translations = {
 
   // Workspace
   workspace: {
-    officialWebsite: "DeerFlow's official website",
-    githubTooltip: "DeerFlow on GitHub",
+    officialWebsite: "FinMind-wiles's official website",
+    githubTooltip: "FinMind-wiles on GitHub",
     settingsAndMore: "Settings and more",
-    visitGithub: "DeerFlow on GitHub",
+    visitGithub: "FinMind-wiles on GitHub",
     reportIssue: "Report an issue",
     contactUs: "Contact us",
-    about: "About DeerFlow",
+    about: "About FinMind-wiles",
     logout: "Log out",
     gatewayUnavailable: "Gateway is temporarily unavailable.",
     gatewayUnavailableRetrying: "Retrying in the background…",
@@ -496,20 +496,20 @@ export const enUS: Translations = {
     saveAndConnect: "Save and connect",
     saveChanges: "Save changes",
     descriptions: {
-      telegram: "Telegram direct messages through your DeerFlow bot.",
+      telegram: "Telegram direct messages through your FinMind-wiles bot.",
       slack: "Slack workspace messages and mentions.",
-      discord: "Discord server messages through your DeerFlow bot.",
-      feishu: "Feishu and Lark messages through your DeerFlow app.",
-      dingtalk: "DingTalk Stream Push messages through your DeerFlow bot.",
-      wechat: "WeChat iLink messages through your DeerFlow bot.",
-      wecom: "WeCom messages through your DeerFlow AI bot.",
+      discord: "Discord server messages through your FinMind-wiles bot.",
+      feishu: "Feishu and Lark messages through your FinMind-wiles app.",
+      dingtalk: "DingTalk Stream Push messages through your FinMind-wiles bot.",
+      wechat: "WeChat iLink messages through your FinMind-wiles bot.",
+      wecom: "WeCom messages through your FinMind-wiles AI bot.",
     },
     connectedAs: (name: string) => `Connected as ${name}.`,
   },
 
   // Page titles (document title)
   pages: {
-    appName: "DeerFlow",
+    appName: "FinMind-wiles",
     chats: "Chats",
     newChat: "New chat",
     untitled: "Untitled",
@@ -535,7 +535,7 @@ export const enUS: Translations = {
     writeFile: "Write file",
     clickToViewContent: "Click to view file content",
     writeTodos: "Update to-do list",
-    skillInstallTooltip: "Install skill and make it available to DeerFlow",
+    skillInstallTooltip: "Install skill and make it available to FinMind-wiles",
   },
 
   humanInput: {
@@ -614,7 +614,7 @@ export const enUS: Translations = {
     actions: "Actions",
     keyboardShortcuts: "Keyboard Shortcuts",
     keyboardShortcutsDescription:
-      "Navigate DeerFlow faster with keyboard shortcuts.",
+      "Navigate FinMind-wiles faster with keyboard shortcuts.",
     openCommandPalette: "Open Command Palette",
     toggleSidebar: "Toggle Sidebar",
   },
@@ -622,7 +622,7 @@ export const enUS: Translations = {
   // Settings
   settings: {
     title: "Settings",
-    description: "Adjust how DeerFlow looks and behaves for you.",
+    description: "Adjust how FinMind-wiles looks and behaves for you.",
     sections: {
       account: "Account",
       appearance: "Appearance",
@@ -636,7 +636,7 @@ export const enUS: Translations = {
     memory: {
       title: "Memory",
       description:
-        "DeerFlow automatically learns from your conversations in the background. These memories help DeerFlow understand you better and deliver a more personalized experience.",
+        "FinMind-wiles automatically learns from your conversations in the background. These memories help FinMind-wiles understand you better and deliver a more personalized experience.",
       empty: "No memory data to display.",
       rawJson: "Raw JSON",
       exportButton: "Export memory",
@@ -734,7 +734,7 @@ export const enUS: Translations = {
     channels: {
       title: "Channels",
       description:
-        "Connect IM accounts that can send messages to DeerFlow from outside the browser.",
+        "Connect IM accounts that can send messages to FinMind-wiles from outside the browser.",
       disabled:
         "Channel connections are not enabled on this server. Ask an administrator to enable channel_connections.",
     },
@@ -745,7 +745,7 @@ export const enUS: Translations = {
       createSkill: "Create skill",
       emptyTitle: "No agent skill yet",
       emptyDescription:
-        "Put your agent skill folders under the `/skills/custom` folder under the root folder of DeerFlow.",
+        "Put your agent skill folders under the `/skills/custom` folder under the root folder of FinMind-wiles.",
       emptyButton: "Create Your First Skill",
       adminRequired: "Admin privileges are required to manage agent skills.",
       installAdminRequired:
@@ -754,12 +754,12 @@ export const enUS: Translations = {
     notification: {
       title: "Notification",
       description:
-        "DeerFlow only sends a completion notification when the window is not active. This is especially useful for long-running tasks so you can switch to other work and get notified when done.",
+        "FinMind-wiles only sends a completion notification when the window is not active. This is especially useful for long-running tasks so you can switch to other work and get notified when done.",
       requestPermission: "Request notification permission",
       deniedHint:
         "Notification permission was denied. You can enable it in your browser's site settings to receive completion alerts.",
       testButton: "Send test notification",
-      testTitle: "DeerFlow",
+      testTitle: "FinMind-wiles",
       testBody: "This is a test notification.",
       notSupported: "Your browser does not support notifications.",
       disableNotification: "Disable notification",
@@ -773,7 +773,7 @@ export const enUS: Translations = {
       changePasswordDescription: "Update your account password.",
       ssoPasswordDescription: "Password is managed by your SSO provider.",
       ssoPasswordMessage:
-        "This account signs in with {provider}, so DeerFlow cannot manage or change its password here. Use your SSO provider's account settings instead.",
+        "This account signs in with {provider}, so FinMind-wiles cannot manage or change its password here. Use your SSO provider's account settings instead.",
       currentPassword: "Current password",
       newPassword: "New password",
       confirmNewPassword: "Confirm new password",
@@ -803,7 +803,7 @@ export const enUS: Translations = {
     createAdminAccount: "Create admin account",
     adminSetupRequiredTitle: "Administrator setup is required",
     adminSetupRequiredDescription:
-      "DeerFlow needs an administrator account before new regular accounts can be created.",
+      "FinMind-wiles needs an administrator account before new regular accounts can be created.",
     orContinueWith: "Or continue with",
     ssoHint:
       "If your account uses single sign-on, sign in with the option below instead.",
