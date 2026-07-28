@@ -22,6 +22,9 @@ dependencies = [
     "pyjwt>=2.13.0",
     "email-validator>=2.0.0",
     "e2b-code-interpreter>=2.8.1",
+    "akshare>=1.18.80",
+    "yfinance>=1.5.2",
+    "openpyxl>=3.1.5",
 ]
 
 [project.optional-dependencies]
