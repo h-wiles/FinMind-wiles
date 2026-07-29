@@ -60,3 +60,7 @@ config.yaml.bak
 /frontend/playwright-report/
 .gstack/
 .worktrees
+
+# PDF financial reports (keep directory structure, ignore files)
+data/reports/*
+!data/reports/.gitkeep
