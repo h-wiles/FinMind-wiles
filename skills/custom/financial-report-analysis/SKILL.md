@@ -19,6 +19,9 @@ allowed-tools:
   - read_file
   - write_file
   - task
+  - search_reports
+  - list_indexed_reports
+  - index_reports
 ---
 
 # 财报分析
@@ -47,14 +50,20 @@ allowed-tools:
 
 用工具获取所有需要的结构化数据和非结构化背景信息。
 
+**数据获取优先级（严格遵守）：**
+1. **本地财报优先**：首先调用 `search_reports` 搜索本地已索引的 PDF 财报。年报中的管理层讨论、风险披露、业务战略等定性信息在 API 中无法获取，只能从本地 PDF 中查找。
+2. **结构化数据**：调用 `financial_data` 和 `stock_info` 获取结构化财务指标。
+3. **网络搜索补充**：仅在本地财报和 API 数据均不足时，才使用 `web_search`。
+
 > **推荐：** 将此阶段委派给 `financial-data-fetcher` 子代理。子代理专注于数据获取，不会被分析思路干扰。
 
 **步骤（自行执行时）：**
-1. 对每家公司调用 `stock_info` 确认代码和基本信息
-2. 调用 `financial_data` 获取三张表（`report_type="all"`，`period=目标期间`）
-3. 如有趋势分析需求，再获取多期数据
-4. 调用 `web_search` 补充搜索：最新公告、行业动态、券商观点
-5. 将原始数据写入 workspace：
+1. 调用 `search_reports` 搜索本地 PDF 中与用户问题相关的内容
+2. 对每家公司调用 `stock_info` 确认代码和基本信息
+3. 调用 `financial_data` 获取三张表（`report_type="all"`，`period=目标期间`）
+4. 如有趋势分析需求，再获取多期数据
+5. 调用 `web_search` 补充搜索：最新公告、行业动态、券商观点
+6. 将原始数据写入 workspace：
    ```
    /mnt/user-data/workspace/financials/{stock_code}_{period}.json
    ```
