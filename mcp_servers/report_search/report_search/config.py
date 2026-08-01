@@ -3,9 +3,12 @@
 All settings are read from environment variables with sensible defaults.
 """
 
+import logging
 import os
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -13,7 +16,7 @@ class Config:
     """Immutable configuration resolved from environment variables."""
 
     pdf_dir: Path
-    db_path: Path
+    index_dir: Path          # Directory for FAISS index + JSON metadata
     model_name: str
     chunk_max_chars: int = 1500
     chunk_overlap_chars: int = 200
@@ -24,30 +27,32 @@ def get_config() -> Config:
     """Resolve configuration from environment variables.
 
     Environment variables:
-        REPORT_SEARCH_DIR  — path to the directory containing PDF financial reports
-        REPORT_SEARCH_DB   — path to the DuckDB index file (default: ~/.report_search/index.db)
+        REPORT_SEARCH_DIR   — path to the directory containing PDF financial reports
+        REPORT_SEARCH_INDEX — path to the index directory (default: ~/.report_search/)
         REPORT_SEARCH_MODEL — HuggingFace model name (default: BAAI/bge-small-zh-v1.5)
     """
     pdf_dir = Path(
         os.environ.get(
             "REPORT_SEARCH_DIR",
-            os.path.expanduser("~/financial_reports"),
+            os.path.expanduser("~/projects/FinMind-wiles/data/reports"),
         )
     )
-    db_path = Path(
+    index_dir = Path(
         os.environ.get(
-            "REPORT_SEARCH_DB",
-            os.path.expanduser("~/.report_search/index.db"),
+            "REPORT_SEARCH_INDEX",
+            os.path.expanduser("~/.report_search"),
         )
     )
-    db_path.parent.mkdir(parents=True, exist_ok=True)
+    index_dir.mkdir(parents=True, exist_ok=True)
 
     model_name = os.environ.get(
         "REPORT_SEARCH_MODEL", "BAAI/bge-small-zh-v1.5"
     )
 
-    return Config(
+    config = Config(
         pdf_dir=pdf_dir,
-        db_path=db_path,
+        index_dir=index_dir,
         model_name=model_name,
     )
+    logger.info("Config loaded: pdf_dir=%s, index_dir=%s", config.pdf_dir, config.index_dir)
+    return config
