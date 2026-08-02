@@ -41,37 +41,36 @@ def test_chunker():
 
 
 def test_store():
+    import shutil
     from report_search.store import VectorStore
 
-    db_path = Path(tempfile.mktemp(suffix=".db"))
+    index_dir = Path(tempfile.mkdtemp())
     try:
-        store = VectorStore(db_path, embedding_dim=512)
+        store = VectorStore(index_dir, embedding_dim=3)
+
         stats = os.stat(__file__)
 
-        # Insert
+        # Insert — use 3-dim normalized vectors for FAISS IP
+        import math
+        v1 = [1.0, 0.0, 0.0]   # normalized: ||v1|| = 1
+        v2 = [0.0, 1.0, 0.0]   # orthogonal to v1
+        v3 = [0.707, 0.707, 0.0]  # ~45 degrees from v1
+
         rid = store.upsert_report(Path("test.pdf"), stats, "600519", 2024)
         assert rid == 1
-        store.insert_chunks(
-            rid,
-            [
-                {
-                    "chunk_index": 0,
-                    "text": "营收1500亿",
-                    "section_title": "经营",
-                    "section_path": "经营",
-                    "embedding": [0.1] * 512,
-                },
-            ],
-        )
+        store.insert_chunks(rid, [
+            {"chunk_index": 0, "text": "营收1500亿", "section_title": "经营", "section_path": "经营", "embedding": v1},
+            {"chunk_index": 1, "text": "行业分析", "section_title": "行业", "section_path": "行业", "embedding": v2},
+        ])
 
-        # Search
-        results = store.search([0.15] * 512, top_k=1)
-        assert len(results) == 1
-        assert results[0]["company_name"] == "600519"
+        # Search: query v3 should match v3 more (cosine similarity higher)
+        results = store.search(v3, top_k=2)
+        assert len(results) == 2
+        assert results[0]["text"] == "行业分析"   # v3 closer to v2
 
-        # Filter
-        assert len(store.search([0.15] * 512, year=2023)) == 0
-        assert len(store.search([0.15] * 512, year=2024)) == 1
+        # Filter by year
+        assert len(store.search(v1, year=2023)) == 0
+        assert len(store.search(v1, year=2024)) == 2
 
         # List
         reports = store.list_reports()
@@ -83,7 +82,7 @@ def test_store():
         print("  ✓ store")
     finally:
         store.close()
-        db_path.unlink(missing_ok=True)
+        shutil.rmtree(index_dir)
 
 
 def test_embedder():
@@ -100,6 +99,64 @@ def test_embedder():
     assert len(batch[0]) == 512
 
     print("  ✓ embedder")
+
+
+# ---------------------------------------------------------------------------
+# Real data search tests
+# ---------------------------------------------------------------------------
+
+def test_search_social_responsibility():
+    """Search the real indexed PDF for 社会责任 (social responsibility) content."""
+
+    index_dir = Path(os.path.expanduser("~/.report_search"))
+    if not (index_dir / "faiss.index").exists():
+        print("  ⏭ 跳过: FAISS 索引不存在（需要先用 MCP Server 索引 PDF）")
+        return
+
+    from report_search.embedder import Embedder
+    from report_search.store import VectorStore
+
+    store = VectorStore(index_dir, embedding_dim=512)
+
+    count = store.get_report_count()
+    assert count > 0, f"索引为空: {index_dir}"
+    print(f"  索引中有 {count} 份报告, {store.get_chunk_count()} 个片段")
+
+    # ---- 语义搜索 (FAISS) ----
+    embedder = Embedder("BAAI/bge-small-zh-v1.5")
+    results = store.search(
+        embedder.embed_query("社会责任"),
+        top_k=5,
+        company_name="贵州茅台",
+        year=2025,
+    )
+    assert len(results) > 0, "语义搜索未找到'社会责任'相关内容"
+
+    print(f"  语义搜索: {len(results)} 条结果")
+    for i, r in enumerate(results[:3], 1):
+        print(f"    [{i}] sim={r['similarity']:.3f} | {r.get('section_title','-')} | {r['text'][:60]}...")
+
+    # ---- 关键词搜索 (遍历 chunks) ----
+    keyword_hits = [
+        c for c in store._chunks
+        if "社会责任" in c["text"]
+        and any(
+            r.get("company_name") == "贵州茅台" and r.get("year") == 2025
+            for r in [store._reports.get(c["report_id"], {})]
+        )
+    ][:5]
+    assert len(keyword_hits) > 0, "关键词搜索'社会责任'无匹配"
+    print(f"  关键词搜索: {len(keyword_hits)} 条匹配")
+    for i, c in enumerate(keyword_hits[:3], 1):
+        text = c["text"]
+        idx = text.find("社会责任")
+        start = max(0, idx - 30)
+        end = min(len(text), idx + 80)
+        snippet = text[start:end].replace("\n", " ")
+        print(f"    [{i}] | {c.get('section_title','-')} | ...{snippet}...")
+
+    store.close()
+    print("  ✓ search_social_responsibility")
 
 
 # ---------------------------------------------------------------------------
@@ -171,9 +228,16 @@ def _rpc(proc, msg: dict) -> dict:
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--full", action="store_true", help="包含真实数据搜索测试")
+    args = parser.parse_args()
+
     print("report-search MCP server — smoke tests\n")
     test_chunker()
     test_store()
     test_embedder()
+    if args.full:
+        test_search_social_responsibility()
     test_mcp_protocol()
     print("\n✓ All smoke tests passed!")

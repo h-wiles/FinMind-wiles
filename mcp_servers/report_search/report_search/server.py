@@ -99,7 +99,7 @@ _ALL_TOOLS = [
 def _build_server() -> Server:
     """Build the MCP server with all tool handlers wired via constructor."""
     config = get_config()
-    store = VectorStore(config.db_path, config.embedding_dim)
+    store = VectorStore(config.index_dir, config.embedding_dim)
     embedder = Embedder(config.model_name)
     indexer = Indexer(config, store, embedder)
 
