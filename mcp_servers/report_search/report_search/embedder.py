@@ -81,10 +81,10 @@ class Embedder:
     def _ensure_loaded(self) -> None:
         if self._model is not None:
             return
-        logger.info("Loading embedding model %s (first use) ...", self._model_name)
+        logger.info("Loading embedding model %s", self._model_name)
         from sentence_transformers import SentenceTransformer
 
-        self._model = SentenceTransformer(self._model_name)
+        self._model = SentenceTransformer(self._model_name, local_files_only=True)
         dim = self._model.get_embedding_dimension()
         logger.info(
             "Embedding model loaded: %s (dim=%d)", self._model_name, dim
